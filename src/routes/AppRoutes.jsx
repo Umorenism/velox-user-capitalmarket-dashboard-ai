@@ -191,6 +191,7 @@ import DownloadsPage from "../pages/Dashboard/DownloadsPage";
 
 import PerformanceReport from "../pages/Dashboard/PerformanceReport";
 import ReportHistoryTransaction from "../utlis/ReportHistoryTrancation";
+import UserProfile from "../pages/profile/UserProfile";
 
 export default function AppRouter() {
   const { user, isTokenValid, loading, userState } = useUser();
@@ -234,6 +235,7 @@ export default function AppRouter() {
         <Route path="promotions" element={<PromotionsBanner />} />
         <Route path="permission" element={<Permission />} />
         <Route path="setting" element={<Setting />} />
+       
 
         {/* Modules */}
         <Route path="modules/compound-calculator" element={<CompoundCalculator />} />
@@ -263,6 +265,7 @@ export default function AppRouter() {
         <Route path="academy/market-overview" element={<MarketOverviewCashFX />} />
         <Route path="signals" element={<VeloxCapitalSignals />} />
         <Route path="book-a-call" element={<BookACall />} />
+         <Route path="companyprofile" element={<UserProfile />} />
       </Route>
 
       {/* === ACADEMY DASHBOARD === */}
