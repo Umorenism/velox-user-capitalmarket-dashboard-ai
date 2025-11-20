@@ -227,7 +227,7 @@ const UserProfile = () => {
                     {key.replace(/([A-Z])/g, " $1").trim()} Wallet
                   </p>
                   <p className="text-3xl font-extrabold text-[#00A991] mt-3">
-                    ${Number(value || 0).toLocaleString()}
+                    ${Number(value).toLocaleString()}
                   </p>
                 </div>
               ))}

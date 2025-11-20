@@ -64,7 +64,10 @@ const UserPackagesSection = () => {
         Packages Series
       </h2>
       <div>
-        <UpgradeButton/>
+        <UpgradeButton packageId="507f1f77bcf86cd799439011" 
+  text="Upgrade to Premium" 
+  onSuccess={() => console.log("Upgraded!")}
+  disabled={false}/>
       </div>
       </div>
 
