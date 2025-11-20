@@ -1509,7 +1509,7 @@ export default function SideBar({ closeSidebar }) {
     { to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
     { to: "/dashboard/users", label: "Packages", icon: <Users size={18} /> },
     { to: "/dashboard/transactions", label: "Transactions", icon: <CreditCard size={18} /> },
-    { to: "/dashboard/part", label: "Partners", icon: <Handshake size={18} /> },
+    // { to: "/dashboard/part", label: "Partners", icon: <Handshake size={18} /> },
     { to: "/dashboard/leaderboard", label: "LeaderBoard", icon: <LeafIcon size={18} /> },
     { to: "/dashboard/retirement-blog", label: "Retirement Blog", icon: <BookOpen size={18} /> },
   ];

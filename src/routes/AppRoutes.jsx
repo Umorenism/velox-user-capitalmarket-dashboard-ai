@@ -231,7 +231,7 @@ export default function AppRouter() {
         <Route path="wallet/internal-withdraw" element={<UsersInternalWithDrawal />} />
         <Route path="transactions" element={<Transaction />} />
         <Route path="wallet/deposit" element={<UsersWallet />} />
-        <Route path="part" element={<PartnerPage />} />
+        {/* <Route path="part" element={<PartnerPage />} /> */}
         <Route path="promotions" element={<PromotionsBanner />} />
         <Route path="permission" element={<Permission />} />
         <Route path="setting" element={<Setting />} />
