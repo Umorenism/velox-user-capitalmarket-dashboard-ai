@@ -627,60 +627,140 @@ export default function Login() {
   /* -----------------------------
      4. HANDLE LOGIN SUBMIT
   ----------------------------- */
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   setLoading(true);
+  //   setShowPackageModal(false);
+
+  //   try {
+  //     // ───── 1. Form validation ─────
+  //     if (!form.email || !form.password || !form.captcha)
+  //       throw new Error("All fields are required!");
+  //     if (form.prefix.trim().toLowerCase() !== "velox")
+  //       throw new Error("Invalid prefix!");
+  //     if (form.captcha !== captchaText) throw new Error("Invalid captcha!");
+
+  //     // ───── 2. Login ─────
+  //     const loginRes = await login({
+  //       prefix: form.prefix,
+  //       email: form.email,
+  //       password: form.password,
+  //     });
+  //     if (!loginRes?.token) throw new Error("Login failed");
+
+  //     // ───── 3. Fetch profile ─────
+  //     const profile = await getUserProfile(loginRes.token);
+  //     const backendUserState = (profile?.userState || "").trim();
+
+  //     // ───── 4. Persist user ─────
+  //     setUser(profile);
+  //     localStorage.setItem("user", JSON.stringify(profile));
+
+  //     // ───── 5. Trigger refresh in other tabs ─────
+  //     markLogin(profile.email);
+
+  //     // ───── 6. Role handling ─────
+  //     if (backendUserState && ["trading", "academy"].includes(backendUserState)) {
+  //       setRole(backendUserState);
+  //       localStorage.setItem("userRole", backendUserState);
+  //       redirectBasedOnRole(backendUserState);
+  //       return;
+  //     }
+
+  //     // ───── 7. New user → show package modal ─────
+  //     clearAuthData();
+  //     setShowPackageModal(true);
+
+  //   } catch (err) {
+  //     console.error("Login error:", err);
+  //     setError(err.message || "Login failed. Please try again.");
+  //     resetCaptcha();
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    setShowPackageModal(false);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+  setShowPackageModal(false);
 
-    try {
-      // ───── 1. Form validation ─────
-      if (!form.email || !form.password || !form.captcha)
-        throw new Error("All fields are required!");
-      if (form.prefix.trim().toLowerCase() !== "velox")
-        throw new Error("Invalid prefix!");
-      if (form.captcha !== captchaText) throw new Error("Invalid captcha!");
-
-      // ───── 2. Login ─────
-      const loginRes = await login({
-        prefix: form.prefix,
-        email: form.email,
-        password: form.password,
-      });
-      if (!loginRes?.token) throw new Error("Login failed");
-
-      // ───── 3. Fetch profile ─────
-      const profile = await getUserProfile(loginRes.token);
-      const backendUserState = (profile?.userState || "").trim();
-
-      // ───── 4. Persist user ─────
-      setUser(profile);
-      localStorage.setItem("user", JSON.stringify(profile));
-
-      // ───── 5. Trigger refresh in other tabs ─────
-      markLogin(profile.email);
-
-      // ───── 6. Role handling ─────
-      if (backendUserState && ["trading", "academy"].includes(backendUserState)) {
-        setRole(backendUserState);
-        localStorage.setItem("userRole", backendUserState);
-        redirectBasedOnRole(backendUserState);
-        return;
-      }
-
-      // ───── 7. New user → show package modal ─────
-      clearAuthData();
-      setShowPackageModal(true);
-
-    } catch (err) {
-      console.error("Login error:", err);
-      setError(err.message || "Login failed. Please try again.");
-      resetCaptcha();
-    } finally {
-      setLoading(false);
+  try {
+    // 1. Basic validation
+    if (!form.email || !form.password || !form.captcha) {
+      throw new Error("All fields are required!");
     }
-  };
+    if (form.prefix.trim().toLowerCase() !== "velox") {
+      throw new Error("Invalid prefix!");
+    }
+    if (form.captcha !== captchaText) {
+      throw new Error("Invalid captcha!");
+    }
 
+    // 2. Login API call
+    const loginRes = await login({
+      prefix: form.prefix.trim(),
+      email: form.email.trim(),
+      password: form.password,
+    });
+
+    if (!loginRes?.token) {
+      throw new Error("No token received. Login failed.");
+    }
+
+    // 3. Get user profile
+    let profile;
+    try {
+      profile = await getUserProfile(loginRes.token);
+    } catch (profileErr) {
+      // This is the most common place for 400
+      const msg = profileErr.response?.data?.message 
+        || profileErr.response?.data?.error 
+        || profileErr.message 
+        || "Failed to fetch user profile";
+      throw new Error(msg);
+    }
+
+    const backendUserState = (profile?.userState || "").trim().toLowerCase();
+
+    // 4. Save user data
+    setUser(profile);
+    localStorage.setItem("user", JSON.stringify(profile));
+
+    // 5. Broadcast login to other tabs
+    markLogin(profile.email);
+
+    // 6. Role-based redirect
+    if (backendUserState && ["trading", "academy"].includes(backendUserState)) {
+      setRole(backendUserState);
+      localStorage.setItem("userRole", backendUserState);
+      redirectBasedOnRole(backendUserState);
+      return;
+    }
+
+    // 7. First-time user → show package selection
+    setShowPackageModal(true);
+
+  } catch (err) {
+    console.error("Login failed:", err);
+
+    // THIS IS THE KEY FIX: Show actual backend message
+    const serverMessage = err.response?.data?.message
+      || err.response?.data?.error
+      || err.response?.data?.detail
+      || err.message;
+
+    setError(serverMessage || "Login failed. Please try again.");
+
+    resetCaptcha();
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#07112b] text-white relative overflow-hidden">
       <BackgroundSwitcher />
