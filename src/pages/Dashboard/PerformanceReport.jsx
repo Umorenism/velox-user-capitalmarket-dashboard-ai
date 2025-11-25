@@ -191,7 +191,7 @@ export default function PerformanceReport() {
         className="max-w-6xl mx-auto bg-white dark:bg-neutral-800 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-neutral-700"
       >
         <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-blue-600 dark:text-blue-400">
-          <TrendingUp /> ROI Growth Over Time
+          <TrendingUp /> Cash back Growth Over Time
         </h2>
 
         <div className="h-[380px] md:h-[420px] w-full">

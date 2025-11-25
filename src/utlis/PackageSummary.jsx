@@ -352,7 +352,7 @@ const PackageSummary = () => {
               {roiData?.name?.replace(/_/g, " ") || "Your Package"}
             </h1>
             <p className="text-6xl font-extrabold mt-6">{progress.toFixed(1)}%</p>
-            <p className="text-xl opacity-90 mt-2">ROI Progress</p>
+            <p className="text-xl opacity-90 mt-2">Cash back Progress</p>
           </div>
         </div>
 
@@ -424,7 +424,7 @@ const PackageSummary = () => {
         {/* Progress Bar */}
         <div className="bg-white dark:bg-neutral-800 rounded-3xl shadow-xl p-5">
           <p className="text-center text-lg font-medium text-gray-700 dark:text-gray-300 mb-6">
-            Overall ROI Progress
+            Overall cash back Progress
           </p>
           <div className="h-10 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden relative">
             <div
